@@ -1,0 +1,15 @@
+Faker==18.5.1
+greenlet==2.0.2
+grpcio==1.54.0
+grpcio-tools==1.54.0
+mccabe==0.7.0
+protobuf==4.22.3
+pycodestyle==2.10.0
+pydocstyle==6.3.0
+pyflakes==3.0.1
+pylama==8.4.1
+python-dateutil==2.8.2
+six==1.16.0
+snowballstemmer==2.2.0
+SQLAlchemy==2.0.11
+typing_extensions==4.5.0
