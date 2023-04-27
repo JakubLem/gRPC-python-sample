@@ -39,6 +39,12 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
             session.close()
             return product_pb2.DeleteProductResponse(success=False)
 
+    def get_product_by_id(self, product_id):
+        session = Session()
+        product = session.query(Product).filter(Product.id == product_id).one_or_none()
+        session.close()
+        return product
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     product_pb2_grpc.add_ProductServiceServicer_to_server(ProductService(), server)
