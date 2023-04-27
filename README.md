@@ -54,3 +54,15 @@ python client.py
 
 
 This README.md file provides an overview of the gRPC example, its features, installation instructions, usage, and the repository structure. You can include this content in your repository's README.md file to help users understand how to use your example project.
+
+## Code Quality and GitHub Actions
+
+This project uses GitHub Actions for continuous integration. The repository includes a GitHub Actions workflow that runs Pylama, a code quality tool for Python, to ensure that the code adheres to best practices and coding standards.
+
+The Pylama configuration is stored in the `pylama.ini` file, which allows you to customize the code quality checks according to your preferences.
+
+To run Pylama locally, run the following command:
+
+```bash
+pylama
+```
