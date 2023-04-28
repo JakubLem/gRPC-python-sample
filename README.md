@@ -9,6 +9,9 @@ This repository contains an example of a gRPC server and client implemented in P
 - Add and delete products
 - SQLAlchemy with SQLite for data storage
 - Faker library for generating random product data
+- Positive and negative testing using pytest
+- Code quality checks using pylama
+- Validation for adding products (price and name length constraints)
 
 ## Installation
 
