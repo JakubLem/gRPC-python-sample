@@ -3,13 +3,21 @@ from concurrent import futures
 import product_pb2
 import product_pb2_grpc
 
-# Import SQLAlchemy Product model and Session
+
 from models import Product, Session
+from validators import validate_product_data
+
 
 class ProductService(product_pb2_grpc.ProductServiceServicer):
     def AddProduct(self, request, context):
         print("add Project")
         product_data = request.product
+
+        try:
+            validate_product_data(product_data)
+        except ValueError as e:
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
+
         new_product = Product(
             name=product_data.name,
             description=product_data.description,

@@ -43,3 +43,27 @@ def test_add_product(grpc_stub):
     assert added_product.name == new_product.name
     assert added_product.description == new_product.description
     assert added_product.price == new_product.price
+
+
+def test_add_product_negative_price(grpc_stub):
+    # Call add_product with a negative price and check if an error is raised
+    new_product = product_pb2.Product(name="Test product", description="Test description", price=-5.0)
+    request = product_pb2.AddProductRequest(product=new_product)
+
+    with pytest.raises(grpc.RpcError) as e:
+        grpc_stub.AddProduct(request)
+
+    assert e.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert e.value.details() == "Price cannot be negative"
+
+
+def test_add_product_with_too_long_name(grpc_stub):
+    # Call add_product with a too long name and check if an error is raised
+    new_product = product_pb2.Product(name="Test product with a very long name", description="Test description", price=100.0)
+    request = product_pb2.AddProductRequest(product=new_product)
+
+    with pytest.raises(grpc.RpcError) as e:
+        grpc_stub.AddProduct(request)
+
+    assert e.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert e.value.details() == "Product name cannot be longer than 20 characters"
