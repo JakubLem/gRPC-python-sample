@@ -19,6 +19,11 @@ class ProductServiceStub(object):
                 request_serializer=product__pb2.AddProductRequest.SerializeToString,
                 response_deserializer=product__pb2.AddProductResponse.FromString,
                 )
+        self.AddCategory = channel.unary_unary(
+                '/product.ProductService/AddCategory',
+                request_serializer=product__pb2.AddCategoryRequest.SerializeToString,
+                response_deserializer=product__pb2.AddCategoryResponse.FromString,
+                )
         self.DeleteProduct = channel.unary_unary(
                 '/product.ProductService/DeleteProduct',
                 request_serializer=product__pb2.DeleteProductRequest.SerializeToString,
@@ -30,6 +35,12 @@ class ProductServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def AddProduct(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddCategory(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -48,6 +59,11 @@ def add_ProductServiceServicer_to_server(servicer, server):
                     servicer.AddProduct,
                     request_deserializer=product__pb2.AddProductRequest.FromString,
                     response_serializer=product__pb2.AddProductResponse.SerializeToString,
+            ),
+            'AddCategory': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddCategory,
+                    request_deserializer=product__pb2.AddCategoryRequest.FromString,
+                    response_serializer=product__pb2.AddCategoryResponse.SerializeToString,
             ),
             'DeleteProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteProduct,
@@ -78,6 +94,23 @@ class ProductService(object):
         return grpc.experimental.unary_unary(request, target, '/product.ProductService/AddProduct',
             product__pb2.AddProductRequest.SerializeToString,
             product__pb2.AddProductResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddCategory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/product.ProductService/AddCategory',
+            product__pb2.AddCategoryRequest.SerializeToString,
+            product__pb2.AddCategoryResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
