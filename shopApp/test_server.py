@@ -51,7 +51,7 @@ def test_add_product_with_invalid_category_id(grpc_stub):
     with pytest.raises(grpc.RpcError) as e:
         grpc_stub.AddProduct(request)
 
-    assert e.value.code() == grpc.StatusCode.NOT_FOUND
+    assert e.value.code() == grpc.StatusCode.INVALID_ARGUMENT
     assert e.value.details() == "Category not found"
 
 

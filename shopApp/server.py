@@ -23,16 +23,12 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
         print("add Project")
         product_data = request.product
 
+        session = Session()
         try:
-            validate_product_data(product_data)
+            validate_product_data(product_data, session)
         except ValueError as e:
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
-
-        session = Session()
         category = session.query(Category).filter_by(id=product_data.category_id).first()
-
-        if not category:
-            context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
 
         new_product = Product(
             name=product_data.name,
