@@ -69,3 +69,13 @@ To run Pylama locally, run the following command:
 ```bash
 pylama
 ```
+
+## Testing
+To run tests for the project, navigate to the shopApp directory and use the pytest command with the -x and -vv flags:
+
+```bash
+cd shopApp/
+pytest -x -vv
+```
+
+The -x flag stops the testing process after the first failure, while the -vv flag increases verbosity to provide more detailed test output. This allows you to efficiently test the application and identify any issues or failures.
