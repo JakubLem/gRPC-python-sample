@@ -13,6 +13,10 @@ This repository contains an example of a gRPC server and client implemented in P
 - Code quality checks using pylama
 - Validation for adding products (price and name length constraints)
 
+## Learning gRPC
+
+This repository also includes a comprehensive learning guide for gRPC in the `LEARN.md` file. This guide covers essential topics and concepts that you should familiarize yourself with when starting to work with gRPC. Refer to this file for a solid foundation in gRPC and to gain a better understanding of the technologies used in this example project.
+
 ## Installation
 
 1. Install the required packages:
