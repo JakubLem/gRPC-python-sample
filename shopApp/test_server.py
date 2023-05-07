@@ -1,7 +1,7 @@
 import pytest
 import product_pb2
 import product_pb2_grpc
-from server import ProductService
+from server import ProductService, UserService
 from grpc import insecure_channel
 from concurrent import futures
 import grpc
@@ -15,8 +15,16 @@ def grpc_add_to_server():
     return product_pb2_grpc.add_ProductServiceServicer_to_server
 
 @pytest.fixture(scope="module")
+def grpc_add_to_server_user():
+    return product_pb2_grpc.add_UserServiceServicer_to_server
+
+@pytest.fixture(scope="module")
 def grpc_servicer():
     return ProductService()
+
+@pytest.fixture(scope="module")
+def grpc_servicer_user():
+    return UserService()
 
 @pytest.fixture(scope="module")
 def grpc_stub(grpc_add_to_server, grpc_servicer):
@@ -27,6 +35,18 @@ def grpc_stub(grpc_add_to_server, grpc_servicer):
 
     with insecure_channel(f"localhost:{port}") as channel:
         yield product_pb2_grpc.ProductServiceStub(channel)
+
+    server.stop(None)
+
+@pytest.fixture(scope="module")
+def grpc_stub_user(grpc_add_to_server_user, grpc_servicer_user):
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    grpc_add_to_server_user(grpc_servicer_user, server)
+    port = server.add_insecure_port("[::]:0")
+    server.start()
+
+    with insecure_channel(f"localhost:{port}") as channel:
+        yield product_pb2_grpc.UserServiceStub(channel)
 
     server.stop(None)
 
@@ -85,7 +105,6 @@ def test_add_product_negative_price(grpc_stub):
     assert e.value.code() == grpc.StatusCode.INVALID_ARGUMENT
     assert e.value.details() == "Price cannot be negative"
 
-
 def test_add_product_with_too_long_name(grpc_stub):
     # Call add_product with a too long name and check if an error is raised
     new_product = product_pb2.Product(name="Test product with a very long name", description="Test description", price=100.0)
@@ -96,3 +115,43 @@ def test_add_product_with_too_long_name(grpc_stub):
 
     assert e.value.code() == grpc.StatusCode.INVALID_ARGUMENT
     assert e.value.details() == "Product name cannot be longer than 20 characters"
+
+def test_register_user_success(grpc_stub_user):
+    username = "test_user"
+    email = "test@example.com"
+    password = "test_password"
+
+    request = product_pb2.RegisterUserRequest(username=username, email=email, password=password)
+    response = grpc_stub_user.RegisterUser(request)
+    assert response.id != 0
+
+def test_register_user_existing(grpc_stub_user):
+    username = "test_user"
+    email = "test@example.com"
+    password = "test_password"
+
+    request = product_pb2.RegisterUserRequest(username=username, email=email, password=password)
+
+    with pytest.raises(grpc.RpcError) as e:
+        grpc_stub_user.RegisterUser(request)
+
+    assert e.value.code() == grpc.StatusCode.ALREADY_EXISTS
+
+def test_authenticate_user_success(grpc_stub_user):
+    username = "test_user"
+    password = "test_password"
+
+    request = product_pb2.AuthenticateUserRequest(username=username, password=password)
+    response = grpc_stub_user.AuthenticateUser(request)
+    assert response.token
+
+def test_authenticate_user_invalid_credentials(grpc_stub_user):
+    username = "test_user"
+    password = "wrong_password"
+
+    request = product_pb2.AuthenticateUserRequest(username=username, password=password)
+
+    with pytest.raises(grpc.RpcError) as e:
+        grpc_stub_user.AuthenticateUser(request)
+
+    assert e.value.code() == grpc.StatusCode.UNAUTHENTICATED
