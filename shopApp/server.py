@@ -22,7 +22,7 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
         return product_pb2.AddCategoryResponse(id=category_id)
 
     def AddProduct(self, request, context):
-        print("add Project")
+        print("add Product")
         product_data = request.product
 
         session = Session()
