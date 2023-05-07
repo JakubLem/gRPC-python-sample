@@ -2,8 +2,10 @@ import grpc
 from concurrent import futures
 import product_pb2
 import product_pb2_grpc
-from models import Product, Category, Session
+from models import Product, Category, User
 from validators import validate_product_data
+from auth import generate_token
+from db import Session
 
 
 class ProductService(product_pb2_grpc.ProductServiceServicer):
@@ -70,21 +72,55 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
         category = session.query(Category).filter(Category.id == category_id).one_or_none()
         session.close()
         return category
+    
+class UserService(product_pb2_grpc.UserServiceServicer):
+    def RegisterUser(self, request, context):
+        username = request.username
+        email = request.email
+        password = request.password
+
+        session = Session()
+        existing_user = session.query(User).filter(
+            (User.username == username) | (User.email == email)
+        ).first()
+
+        if existing_user:
+            context.abort(grpc.StatusCode.ALREADY_EXISTS, "User already exists")
+
+        new_user = User(username=username, email=email)
+        new_user.set_password(password)
+
+        session.add(new_user)
+        session.commit()
+        user_id = new_user.id
+        session.close()
+
+        return product_pb2.RegisterUserResponse(id=user_id)
+
+    def AuthenticateUser(self, request, context):
+        username = request.username
+        password = request.password
+
+        session = Session()
+        user = session.query(User).filter(User.username == username).first()
+        session.close()
+
+        if user and user.check_password(password):
+            token = generate_token(user.id)
+            return product_pb2.AuthenticateUserResponse(token=token)
+        else:
+            context.abort(grpc.StatusCode.UNAUTHENTICATED, "Invalid credentials")
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     product_pb2_grpc.add_ProductServiceServicer_to_server(ProductService(), server)
+    product_pb2_grpc.add_UserServiceServicer_to_server(UserService(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
     print("Server started on port 50051.")
     server.wait_for_termination()
 
+
 if __name__ == '__main__':
     serve()
-
-
-
-
-
-
-

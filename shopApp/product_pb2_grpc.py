@@ -130,3 +130,97 @@ class ProductService(object):
             product__pb2.DeleteProductResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+
+class UserServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.RegisterUser = channel.unary_unary(
+                '/product.UserService/RegisterUser',
+                request_serializer=product__pb2.RegisterUserRequest.SerializeToString,
+                response_deserializer=product__pb2.RegisterUserResponse.FromString,
+                )
+        self.AuthenticateUser = channel.unary_unary(
+                '/product.UserService/AuthenticateUser',
+                request_serializer=product__pb2.AuthenticateUserRequest.SerializeToString,
+                response_deserializer=product__pb2.AuthenticateUserResponse.FromString,
+                )
+
+
+class UserServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def RegisterUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AuthenticateUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_UserServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'RegisterUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.RegisterUser,
+                    request_deserializer=product__pb2.RegisterUserRequest.FromString,
+                    response_serializer=product__pb2.RegisterUserResponse.SerializeToString,
+            ),
+            'AuthenticateUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.AuthenticateUser,
+                    request_deserializer=product__pb2.AuthenticateUserRequest.FromString,
+                    response_serializer=product__pb2.AuthenticateUserResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'product.UserService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class UserService(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def RegisterUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/product.UserService/RegisterUser',
+            product__pb2.RegisterUserRequest.SerializeToString,
+            product__pb2.RegisterUserResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AuthenticateUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/product.UserService/AuthenticateUser',
+            product__pb2.AuthenticateUserRequest.SerializeToString,
+            product__pb2.AuthenticateUserResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

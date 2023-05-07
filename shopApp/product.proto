@@ -7,6 +7,11 @@ service ProductService {
   rpc DeleteProduct (DeleteProductRequest) returns (DeleteProductResponse);
 }
 
+service UserService {
+  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserResponse);
+  rpc AuthenticateUser (AuthenticateUserRequest) returns (AuthenticateUserResponse);
+}
+
 message Product {
   int32 id = 1;
   string name = 2;
@@ -42,4 +47,23 @@ message DeleteProductRequest {
 
 message DeleteProductResponse {
   bool success = 1;
+}
+
+message RegisterUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message RegisterUserResponse {
+  int32 id = 1;
+}
+
+message AuthenticateUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthenticateUserResponse {
+  string token = 1;
 }

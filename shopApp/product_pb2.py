@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rproduct.proto\x12\x07product\"\\\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x13\n\x0b\x63\x61tegory_id\x18\x05 \x01(\x05\"$\n\x08\x43\x61tegory\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"6\n\x11\x41\x64\x64ProductRequest\x12!\n\x07product\x18\x01 \x01(\x0b\x32\x10.product.Product\" \n\x12\x41\x64\x64ProductResponse\x12\n\n\x02id\x18\x01 \x01(\x05\"9\n\x12\x41\x64\x64\x43\x61tegoryRequest\x12#\n\x08\x63\x61tegory\x18\x01 \x01(\x0b\x32\x11.product.Category\"!\n\x13\x41\x64\x64\x43\x61tegoryResponse\x12\n\n\x02id\x18\x01 \x01(\x05\"\"\n\x14\x44\x65leteProductRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"(\n\x15\x44\x65leteProductResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32\xf1\x01\n\x0eProductService\x12\x45\n\nAddProduct\x12\x1a.product.AddProductRequest\x1a\x1b.product.AddProductResponse\x12H\n\x0b\x41\x64\x64\x43\x61tegory\x12\x1b.product.AddCategoryRequest\x1a\x1c.product.AddCategoryResponse\x12N\n\rDeleteProduct\x12\x1d.product.DeleteProductRequest\x1a\x1e.product.DeleteProductResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rproduct.proto\x12\x07product\"\\\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x13\n\x0b\x63\x61tegory_id\x18\x05 \x01(\x05\"$\n\x08\x43\x61tegory\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"6\n\x11\x41\x64\x64ProductRequest\x12!\n\x07product\x18\x01 \x01(\x0b\x32\x10.product.Product\" \n\x12\x41\x64\x64ProductResponse\x12\n\n\x02id\x18\x01 \x01(\x05\"9\n\x12\x41\x64\x64\x43\x61tegoryRequest\x12#\n\x08\x63\x61tegory\x18\x01 \x01(\x0b\x32\x11.product.Category\"!\n\x13\x41\x64\x64\x43\x61tegoryResponse\x12\n\n\x02id\x18\x01 \x01(\x05\"\"\n\x14\x44\x65leteProductRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"(\n\x15\x44\x65leteProductResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"H\n\x13RegisterUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"\"\n\x14RegisterUserResponse\x12\n\n\x02id\x18\x01 \x01(\x05\"=\n\x17\x41uthenticateUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\")\n\x18\x41uthenticateUserResponse\x12\r\n\x05token\x18\x01 \x01(\t2\xf1\x01\n\x0eProductService\x12\x45\n\nAddProduct\x12\x1a.product.AddProductRequest\x1a\x1b.product.AddProductResponse\x12H\n\x0b\x41\x64\x64\x43\x61tegory\x12\x1b.product.AddCategoryRequest\x1a\x1c.product.AddCategoryResponse\x12N\n\rDeleteProduct\x12\x1d.product.DeleteProductRequest\x1a\x1e.product.DeleteProductResponse2\xb3\x01\n\x0bUserService\x12K\n\x0cRegisterUser\x12\x1c.product.RegisterUserRequest\x1a\x1d.product.RegisterUserResponse\x12W\n\x10\x41uthenticateUser\x12 .product.AuthenticateUserRequest\x1a!.product.AuthenticateUserResponseb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'product_pb2', globals())
@@ -36,6 +36,16 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _DELETEPRODUCTREQUEST._serialized_end=376
   _DELETEPRODUCTRESPONSE._serialized_start=378
   _DELETEPRODUCTRESPONSE._serialized_end=418
-  _PRODUCTSERVICE._serialized_start=421
-  _PRODUCTSERVICE._serialized_end=662
+  _REGISTERUSERREQUEST._serialized_start=420
+  _REGISTERUSERREQUEST._serialized_end=492
+  _REGISTERUSERRESPONSE._serialized_start=494
+  _REGISTERUSERRESPONSE._serialized_end=528
+  _AUTHENTICATEUSERREQUEST._serialized_start=530
+  _AUTHENTICATEUSERREQUEST._serialized_end=591
+  _AUTHENTICATEUSERRESPONSE._serialized_start=593
+  _AUTHENTICATEUSERRESPONSE._serialized_end=634
+  _PRODUCTSERVICE._serialized_start=637
+  _PRODUCTSERVICE._serialized_end=878
+  _USERSERVICE._serialized_start=881
+  _USERSERVICE._serialized_end=1060
 # @@protoc_insertion_point(module_scope)
