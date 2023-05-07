@@ -1,3 +1,5 @@
+import os
+
 import pytest
 import product_pb2
 import product_pb2_grpc
@@ -5,6 +7,8 @@ from server import ProductService, UserService
 from grpc import insecure_channel
 from concurrent import futures
 import grpc
+
+os.environ["TESTING"] = "1"
 
 @pytest.fixture(scope="module")
 def grpc_channel(grpc_server):

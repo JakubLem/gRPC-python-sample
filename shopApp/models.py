@@ -1,10 +1,7 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-Base = declarative_base()
+from db import Base
 
 
 class Category(Base):
@@ -39,8 +36,3 @@ class User(Base):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-
-engine = create_engine('sqlite:///products.db')
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)

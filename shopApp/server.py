@@ -1,12 +1,22 @@
-from models import User
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 import grpc
 from concurrent import futures
 import product_pb2
 import product_pb2_grpc
-from models import Product, Category, Session
+from models import Product, Category, User
 from validators import validate_product_data
 from auth import generate_token
+
+
+def create_session():
+    if os.environ.get("TESTING"):
+        engine = create_engine("sqlite:///:memory:")
+    else:
+        engine = create_engine('sqlite:///products.db')
+    return sessionmaker(bind=engine)()
 
 
 class ProductService(product_pb2_grpc.ProductServiceServicer):
@@ -14,7 +24,7 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
         category_data = request.category
         new_category = Category(name=category_data.name)
 
-        session = Session()
+        session = create_session()
         session.add(new_category)
         session.commit()
         category_id = new_category.id
@@ -26,7 +36,7 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
         print("add Project")
         product_data = request.product
 
-        session = Session()
+        session = create_session()
         try:
             validate_product_data(product_data, session)
         except ValueError as e:
@@ -51,7 +61,7 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
         print("delete Product")
         product_id = request.id
         
-        session = Session()
+        session = create_session()
         product = session.query(Product).filter_by(id=product_id).first()
         if product:
             session.delete(product)
@@ -63,13 +73,13 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
             return product_pb2.DeleteProductResponse(success=False)
 
     def get_product_by_id(self, product_id):
-        session = Session()
+        session = create_session()
         product = session.query(Product).filter(Product.id == product_id).one_or_none()
         session.close()
         return product
 
     def get_category_by_id(self, category_id):
-        session = Session()
+        session = create_session()
         category = session.query(Category).filter(Category.id == category_id).one_or_none()
         session.close()
         return category
@@ -80,7 +90,7 @@ class UserService(product_pb2_grpc.UserServiceServicer):
         email = request.email
         password = request.password
 
-        session = Session()
+        session = create_session()
         existing_user = session.query(User).filter(
             (User.username == username) | (User.email == email)
         ).first()
@@ -102,7 +112,7 @@ class UserService(product_pb2_grpc.UserServiceServicer):
         username = request.username
         password = request.password
 
-        session = Session()
+        session = create_session()
         user = session.query(User).filter(User.username == username).first()
         session.close()
 
